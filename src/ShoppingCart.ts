@@ -7,8 +7,12 @@ export default class ShoppingCart {
 
   constructor() {}
 
+  getCart() {
+    return this.cart;
+  }
+
   addProductToCart(product: Product) {
-    const item = this.cart.find((item) => item.product.getId() === product.getId());
+    const item = this.findItem(product);
     
     if (item) {
       item.quantity++;
@@ -19,7 +23,7 @@ export default class ShoppingCart {
   }
 
   removeProductFromCart(product: Product) {
-    const itemIndex = this.cart.findIndex((item) => item.product.id === product.id);
+    const itemIndex = this.cart.findIndex((item) => item.product.getId() === product.getId());
 
     if (itemIndex === -1) {
       return;
@@ -28,12 +32,8 @@ export default class ShoppingCart {
     this.cart.splice(itemIndex, 1);
   }
 
-  getCart() {
-    return this.cart;
-  }
-
   incrementProductQuantity(product: Product) {
-    const item = this.cart.find((item) => item.product.getId() === product.getId());
+    const item = this.findItem(product);
 
     if (item) {
       item.quantity++;
@@ -41,7 +41,7 @@ export default class ShoppingCart {
   }
   
   decrementProductQuantity(product: Product) {
-    const item = this.cart.find((item) => item.product.getId() === product.getId());
+    const item = this.findItem(product);
 
     if (item) {
       item.quantity--;
@@ -50,5 +50,9 @@ export default class ShoppingCart {
         this.removeProductFromCart(product);
       }
     }
+  }
+
+  private findItem(product: Product): CartItem | undefined {
+    return this.cart.find((item) => item.product.getId() === product.getId());
   }
 }

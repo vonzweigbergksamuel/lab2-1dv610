@@ -1,5 +1,6 @@
 import Product from "./Product";
 
+// Defines a Cart Item.
 export default class CartItem {
   product: Product;
   quantity: number;
