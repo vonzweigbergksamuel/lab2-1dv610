@@ -1,7 +1,7 @@
-export class Cart {
+import ShoppingCart from "./ShoppingCart";
+// import LocalStorageHandler from "./LocalStorageHandler";
 
-}
-
-export interface CartInterface {
-
+export {
+    ShoppingCart,
+    // LocalStorageHandler
 }
