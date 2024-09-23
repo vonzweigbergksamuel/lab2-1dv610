@@ -1,14 +1,5 @@
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  description?: string;
-};
-
-type CartItem = {
-  product: Product;
-  quantity: number;
-};
+import CartItem from "./CartItem";
+import Product from "./Product";
 
 export default class ShoppingCart {
 
@@ -17,14 +8,14 @@ export default class ShoppingCart {
   constructor() {}
 
   addProductToCart(product: Product) {
-    const item = this.cart.find((item) => item.product.id === product.id);
+    const item = this.cart.find((item) => item.product.getId() === product.getId());
     
     if (item) {
       item.quantity++;
       return;
     }
 
-    this.cart.push({ product, quantity: 1 });
+    this.cart.push(new CartItem(product, 1));
   }
 
   removeProductFromCart(product: Product) {
@@ -35,5 +26,29 @@ export default class ShoppingCart {
     }
 
     this.cart.splice(itemIndex, 1);
+  }
+
+  getCart() {
+    return this.cart;
+  }
+
+  incrementProductQuantity(product: Product) {
+    const item = this.cart.find((item) => item.product.getId() === product.getId());
+
+    if (item) {
+      item.quantity++;
+    }
+  }
+  
+  decrementProductQuantity(product: Product) {
+    const item = this.cart.find((item) => item.product.getId() === product.getId());
+
+    if (item) {
+      item.quantity--;
+
+      if (item.quantity === 0) {
+        this.removeProductFromCart(product);
+      }
+    }
   }
 }
