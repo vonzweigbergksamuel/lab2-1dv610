@@ -1,29 +1,35 @@
 import CartItem from "./CartItem";
-import Product from "./Product";
+import LocalStorageHandler from "./LocalStorageHandler";
 
 export default class ShoppingCart {
 
-  private cart: CartItem[] = [];
+  private cart: CartItem[];
+  private localStorage: LocalStorageHandler;
 
-  constructor() {}
+  constructor() {
+    this.cart = [];
+    this.localStorage = new LocalStorageHandler(this.cart);
+  }
 
   getCart() {
     return this.cart;
   }
 
-  addProductToCart(product: Product) {
-    const item = this.findItem(product);
+  addProductToCart(productId: number) {
+    const item = this.findItem(productId);
     
     if (item) {
       item.quantity++;
       return;
     }
 
-    this.cart.push(new CartItem(product, 1));
+    this.cart.push(new CartItem(productId, 1));
+
+    this.localStorage.saveToLocalStorage();
   }
 
-  removeProductFromCart(product: Product) {
-    const itemIndex = this.cart.findIndex((item) => item.product.getId() === product.getId());
+  removeProductFromCart(productId: number) {
+    const itemIndex = this.cart.findIndex((item) => item.productId === productId);
 
     if (itemIndex === -1) {
       return;
@@ -32,27 +38,27 @@ export default class ShoppingCart {
     this.cart.splice(itemIndex, 1);
   }
 
-  incrementProductQuantity(product: Product) {
-    const item = this.findItem(product);
+  incrementProductQuantity(productId: number) {
+    const item = this.findItem(productId);
 
     if (item) {
       item.quantity++;
     }
   }
   
-  decrementProductQuantity(product: Product) {
-    const item = this.findItem(product);
+  decrementProductQuantity(productId: number) {
+    const item = this.findItem(productId);
 
     if (item) {
       item.quantity--;
 
       if (item.quantity === 0) {
-        this.removeProductFromCart(product);
+        this.removeProductFromCart(productId);
       }
     }
   }
 
-  private findItem(product: Product): CartItem | undefined {
-    return this.cart.find((item) => item.product.getId() === product.getId());
+  private findItem(productId: number): CartItem | undefined {
+    return this.cart.find((item) => item.productId === productId);
   }
 }

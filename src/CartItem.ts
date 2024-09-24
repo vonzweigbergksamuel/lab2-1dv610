@@ -1,12 +1,10 @@
-import Product from "./Product";
-
 // Defines a Cart Item.
 export default class CartItem {
-  product: Product;
+  productId: number;
   quantity: number;
 
-  constructor(product: Product, quantity: number) {
-    this.product = product;
+  constructor(productId: number, quantity: number) {
+    this.productId = productId;
     this.quantity = quantity;
   }
 
