@@ -3,15 +3,22 @@ import LocalStorageHandler from "./LocalStorageHandler";
 
 export default class ShoppingCart {
 
-  private cart: CartItem[] = [];
   private localStorage: LocalStorageHandler;
+  private cart: CartItem[];
 
   constructor() {
     this.localStorage = new LocalStorageHandler();
+    this.cart = this.localStorage.load();
   }
 
   getCart() {
     return this.cart;
+  }
+
+  getProductQuantity(productId: number) {
+    const item = this.findItem(productId);
+
+    return item ? item.quantity : 0;
   }
 
   addProductToCart(productId: number) {
@@ -34,7 +41,7 @@ export default class ShoppingCart {
     }
 
     this.cart.splice(itemIndex, 1);
-    this.localStorage.remove();
+    this.localStorage.save(this.cart);
   }
 
   incrementProductQuantity(productId: number) {

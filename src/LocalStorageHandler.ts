@@ -14,4 +14,14 @@ export default class LocalStorageHandler {
   remove() {
     this.localStorage.removeItem("data");
   }
+
+  load() {
+    const data = this.localStorage.getItem("data");
+
+    if (!data) {
+      return [];
+    }
+
+    return JSON.parse(data);
+  }
 }
