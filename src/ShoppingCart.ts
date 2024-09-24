@@ -8,7 +8,7 @@ export default class ShoppingCart {
 
   constructor() {
     this.localStorage = new LocalStorageHandler();
-    this.cart = this.localStorage.load();
+    this.cart = this.localStorage.load() || [];
   }
 
   getCart() {
@@ -63,13 +63,18 @@ export default class ShoppingCart {
       return;
     }
 
-    if (item.quantity === 0) {
+    if (item.quantity <= 1) {
       this.removeProductFromCart(productId);
       return;
     }
 
     item.quantity--;
     this.localStorage.save(this.cart);
+  }
+
+  clearCart() {
+    this.cart = [];
+    this.localStorage.remove();
   }
 
   private findItem(productId: number): CartItem | undefined {
