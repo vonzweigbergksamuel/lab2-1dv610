@@ -3,12 +3,11 @@ import LocalStorageHandler from "./LocalStorageHandler";
 
 export default class ShoppingCart {
 
-  private cart: CartItem[];
+  private cart: CartItem[] = [];
   private localStorage: LocalStorageHandler;
 
   constructor() {
-    this.cart = [];
-    this.localStorage = new LocalStorageHandler(this.cart);
+    this.localStorage = new LocalStorageHandler();
   }
 
   getCart() {
@@ -24,8 +23,7 @@ export default class ShoppingCart {
     }
 
     this.cart.push(new CartItem(productId, 1));
-
-    this.localStorage.saveToLocalStorage();
+    this.localStorage.save(this.cart);
   }
 
   removeProductFromCart(productId: number) {
@@ -36,26 +34,35 @@ export default class ShoppingCart {
     }
 
     this.cart.splice(itemIndex, 1);
+    this.localStorage.remove();
   }
 
   incrementProductQuantity(productId: number) {
     const item = this.findItem(productId);
 
-    if (item) {
-      item.quantity++;
+    if (!item) {
+      this.addProductToCart(productId);
+      return;
     }
+
+    item.quantity++;
+    this.localStorage.save(this.cart);
   }
   
   decrementProductQuantity(productId: number) {
     const item = this.findItem(productId);
 
-    if (item) {
-      item.quantity--;
-
-      if (item.quantity === 0) {
-        this.removeProductFromCart(productId);
-      }
+    if (!item) {
+      return;
     }
+
+    if (item.quantity === 0) {
+      this.removeProductFromCart(productId);
+      return;
+    }
+
+    item.quantity--;
+    this.localStorage.save(this.cart);
   }
 
   private findItem(productId: number): CartItem | undefined {

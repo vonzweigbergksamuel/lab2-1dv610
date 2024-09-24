@@ -8,11 +8,10 @@ export default class CartItem {
     this.quantity = quantity;
   }
 
-  toJSON() {
-
-  }
-
-  fromJSON() {
-
-  }
+  toJSON(key: string) {
+    return {
+      productId: this.productId,
+      quantity: this.quantity
+    };
+  };
 };

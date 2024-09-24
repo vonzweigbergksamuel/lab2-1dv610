@@ -2,22 +2,16 @@ import CartItem from "./CartItem";
 
 export default class LocalStorageHandler {
   private localStorage;
-  private cart: CartItem[];
 
-  constructor(cart: CartItem[]) {
+  constructor() {
     this.localStorage = window.localStorage;
-    this.cart = cart;
   }
 
-  saveToLocalStorage() {
-    this.localStorage.setItem("data", JSON.stringify(this.cart));
+  save(cart: CartItem[]) {
+    this.localStorage.setItem("data", JSON.stringify(cart));
   }
 
-  removeFromLocalStorage() {
+  remove() {
     this.localStorage.removeItem("data");
-  }
-
-  updateLocalStorage() {
-    
   }
 }
