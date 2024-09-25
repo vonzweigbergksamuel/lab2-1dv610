@@ -1,5 +1,5 @@
-import CartItem from "./CartItem";
 import StorageHandler from "./StorageHandler";
+import CartItem from "./CartItem";
 
 export default class LocalStorageHandler implements StorageHandler {
   private localStorage;
@@ -26,9 +26,14 @@ export default class LocalStorageHandler implements StorageHandler {
     return this.sanitizeData(JSON.parse(data));
   }
 
+  /**
+   * Sanitizes the data stored in localStorage before loading it into the shopping cart.
+   * This is done to prevent attacks like XSS and to ensure the data is in the correct format.
+   * If the data is invalid, it will return an empty array.
+   */
   private sanitizeData(data: any): CartItem[] {
     if (!Array.isArray(data)) {
-      console.warn("Invalid data format in LocalStorage. Expected an array.");
+      console.warn("Invalid data format in localStorage. Expected an array.");
       return [];
     }
 
@@ -36,7 +41,7 @@ export default class LocalStorageHandler implements StorageHandler {
       .map((item) => {
         if (typeof item !== "object") {
           console.warn(
-            "Invalid data format in LocalStorage. Expected an object."
+            "Invalid data format in localStorage. Expected an object."
           );
           return null;
         }
@@ -48,7 +53,7 @@ export default class LocalStorageHandler implements StorageHandler {
           item.productId < 0
         ) {
           console.warn(
-            "Invalid data format in LocalStorage. Expected a CartItem object."
+            "Invalid data format in localStorage. Expected a CartItem object."
           );
           return null;
         }
@@ -60,13 +65,21 @@ export default class LocalStorageHandler implements StorageHandler {
     return sanitizedCart;
   }
 
-  // Santize strings if I choose productIds are allowed to be strings
+  /**
+   * If productIds are stored as strings, this method sanitizes them.
+   * It's main purpose is to prevent XSS attacks.
+   * Accepted characters are: a-z, A-Z, 0-9.
+   * REGEX can be modified to accept other characters if needed.
+   */
   private sanitizeStrings(input: string): string {
     if (typeof input !== "string") {
-      console.warn("Invalid data format in LocalStorage. Expected a string.");
+      console.warn("Invalid data format in localStorage. Expected a string.");
       return "";
     }
 
-    return input.replace(/[^a-zA-Z0-9]/g, "");
+    // Variable for determining which characters are allowed.
+    const REGEX = /[^a-zA-Z0-9]/g;
+
+    return input.replace(REGEX, "");
   }
 }
