@@ -1,14 +1,18 @@
 {
   "name": "shopping-cart-module",
   "version": "1.0.0",
-  "description": "A shopping cart module to use in any commerce project. Import the module and you will have shopping cart functionality available directly in your project. The module gives you the ability to add, remove, increment items, calculate price, and get complete cart data about all products in the shopping cart. The cart data can later be used to hook up with any payment gateway or to show the cart data to the user. The module is object-oriented and written in TypeScript. It's open-source and free to use in any project, both personally and commercially.",
+  "description": "A simple shopping cart module using local- or session storage for persistence.",
   "type": "module",
   "module": "dist/index.js",
   "main": "dist/index.cjs",
   "scripts": {
     "build": "tsup"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vonzweigbergksamuel/lab2-1dv610"
+  },
+  "author": "Samuel von Zweigbergk <samuelvonzweigbergk.p@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "tsup": "^8.3.0",
