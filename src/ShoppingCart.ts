@@ -1,18 +1,21 @@
+import StorageHandler from "./StorageHandler";
+import CartItem from "./CartItem";
+
 /**
  * The public interface of the Shopping Cart Module.
  * Public methods of this class are used to interact with the shopping cart.
  */
-
-import CartItem from "./CartItem";
-import LocalStorageHandler from "./LocalStorageHandler";
-
 export default class ShoppingCart {
-  private localStorage: LocalStorageHandler;
+  private storageHandler: StorageHandler;
   private cart: CartItem[];
 
-  constructor() {
-    this.localStorage = new LocalStorageHandler();
-    this.cart = this.localStorage.load() || [];
+  /**
+   * The Shopping Cart needs a storage handler to save and load the cart.
+   * Provide an instance of a storage handler to the constructor.
+   */
+  constructor(storageHandler: StorageHandler) {
+    this.storageHandler = storageHandler;
+    this.cart = this.storageHandler.load() || [];
   }
 
   /**
@@ -39,6 +42,11 @@ export default class ShoppingCart {
     return this.cart.reduce((total, item) => total + item.quantity, 0);
   }
 
+  /**
+   * Adds a product to the shopping cart with a quantity of 1.
+   * If the product is already in the cart, it increments the quantity by 1.
+   * The cart is then saved using the storage handler of choice.
+   */
   addProductToCart(productId: number): void {
     const item = this.findItem(productId);
 
@@ -48,22 +56,33 @@ export default class ShoppingCart {
     }
 
     this.cart.push(new CartItem(productId, 1));
-    this.localStorage.save(this.cart);
+    this.storageHandler.save(this.cart);
   }
 
+  /**
+   * Removes a product from the shopping cart.
+   * If the product is not in the cart, it logs an error and returns nothing.
+   * The cart is then saved using the storage handler of choice.
+   */
   removeProductFromCart(productId: number): void {
     const itemIndex = this.cart.findIndex(
       (item) => item.productId === productId
     );
 
     if (itemIndex === -1) {
+      console.error("Product not found in cart.");
       return;
     }
 
     this.cart.splice(itemIndex, 1);
-    this.localStorage.save(this.cart);
+    this.storageHandler.save(this.cart);
   }
 
+  /**
+   * Increments the quantity of a product in the shopping cart.
+   * If the product is not in the cart, it adds the product with a quantity of 1.
+   * The cart is then saved using the storage handler of choice.
+   */
   incrementProductQuantity(productId: number): void {
     const item = this.findItem(productId);
 
@@ -73,13 +92,20 @@ export default class ShoppingCart {
     }
 
     item.quantity++;
-    this.localStorage.save(this.cart);
+    this.storageHandler.save(this.cart);
   }
 
+  /**
+   * Decrements the quantity of a product in the shopping cart.
+   * If the product is not in the cart, it logs an error and returns nothing.
+   * If the quantity of the product is less than or equal to 1 when the method is called, it removes the product from the cart.
+   * The cart is then saved using the storage handler of choice.
+   */
   decrementProductQuantity(productId: number): void {
     const item = this.findItem(productId);
 
     if (!item) {
+      console.error("Product not found in cart.");
       return;
     }
 
@@ -89,15 +115,15 @@ export default class ShoppingCart {
     }
 
     item.quantity--;
-    this.localStorage.save(this.cart);
+    this.storageHandler.save(this.cart);
   }
 
   /**
-   * Removes all items from the shopping cart and clears the local storage.
+   * Removes all items from the shopping cart and clears the storage handler of choice.
    */
   clearCart(): void {
     this.cart = [];
-    this.localStorage.remove();
+    this.storageHandler.remove();
   }
 
   private findItem(productId: number): CartItem | undefined {
