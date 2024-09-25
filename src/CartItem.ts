@@ -11,7 +11,7 @@ export default class CartItem {
   toJSON(key: string) {
     return {
       productId: this.productId,
-      quantity: this.quantity
+      quantity: this.quantity,
     };
-  };
-};
+  }
+}

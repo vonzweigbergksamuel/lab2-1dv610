@@ -1,17 +1,18 @@
 import CartItem from "./CartItem";
+import StorageHandler from "./StorageHandler";
 
-export default class LocalStorageHandler {
+export default class LocalStorageHandler implements StorageHandler {
   private localStorage;
 
   constructor() {
     this.localStorage = window.localStorage;
   }
 
-  save(cart: CartItem[]) {
+  save(cart: CartItem[]): void {
     this.localStorage.setItem("data", JSON.stringify(cart));
   }
 
-  remove() {
+  remove(): void {
     this.localStorage.removeItem("data");
   }
 
@@ -31,24 +32,30 @@ export default class LocalStorageHandler {
       return [];
     }
 
-    const sanitizedCart = data.map((item) => {
-      if (typeof item !== "object") {
-        console.warn("Invalid data format in LocalStorage. Expected an object.");
-        return null;
-      }
+    const sanitizedCart = data
+      .map((item) => {
+        if (typeof item !== "object") {
+          console.warn(
+            "Invalid data format in LocalStorage. Expected an object."
+          );
+          return null;
+        }
 
-      if (
-        typeof item.productId !== "number" ||
-        typeof item.quantity !== "number" ||
-        item.quantity <= 0 ||
-        item.productId < 0
-      ) {
-        console.warn("Invalid data format in LocalStorage. Expected a CartItem object.");
-        return null;
-      }
+        if (
+          typeof item.productId !== "number" ||
+          typeof item.quantity !== "number" ||
+          item.quantity <= 0 ||
+          item.productId < 0
+        ) {
+          console.warn(
+            "Invalid data format in LocalStorage. Expected a CartItem object."
+          );
+          return null;
+        }
 
-      return new CartItem(item.productId, item.quantity);
-    }).filter((item) => item !== null);
+        return new CartItem(item.productId, item.quantity);
+      })
+      .filter((item) => item !== null);
 
     return sanitizedCart;
   }
@@ -60,6 +67,6 @@ export default class LocalStorageHandler {
       return "";
     }
 
-    return input.replace(/[^a-zA-Z0-9]/g, '');
+    return input.replace(/[^a-zA-Z0-9]/g, "");
   }
 }

@@ -1,8 +1,12 @@
+/**
+ * The public interface of the Shopping Cart Module.
+ * Public methods of this class are used to interact with the shopping cart.
+ */
+
 import CartItem from "./CartItem";
 import LocalStorageHandler from "./LocalStorageHandler";
 
 export default class ShoppingCart {
-
   private localStorage: LocalStorageHandler;
   private cart: CartItem[];
 
@@ -11,19 +15,33 @@ export default class ShoppingCart {
     this.cart = this.localStorage.load() || [];
   }
 
-  getCart() {
+  /**
+   * Returns an array of the items in the shopping cart.
+   * Each item is an object with a productId and a quantity.
+   */
+  getCart(): CartItem[] {
     return this.cart;
   }
 
-  getProductQuantity(productId: number) {
+  /**
+   * Returns the quantity of a single product in the shopping cart.
+   */
+  getProductQuantity(productId: number): number {
     const item = this.findItem(productId);
 
     return item ? item.quantity : 0;
   }
 
-  addProductToCart(productId: number) {
+  /**
+   * Returns the total quantity of all products in the shopping cart.
+   */
+  getTotalQuantity(): number {
+    return this.cart.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  addProductToCart(productId: number): void {
     const item = this.findItem(productId);
-    
+
     if (item) {
       item.quantity++;
       return;
@@ -33,8 +51,10 @@ export default class ShoppingCart {
     this.localStorage.save(this.cart);
   }
 
-  removeProductFromCart(productId: number) {
-    const itemIndex = this.cart.findIndex((item) => item.productId === productId);
+  removeProductFromCart(productId: number): void {
+    const itemIndex = this.cart.findIndex(
+      (item) => item.productId === productId
+    );
 
     if (itemIndex === -1) {
       return;
@@ -44,7 +64,7 @@ export default class ShoppingCart {
     this.localStorage.save(this.cart);
   }
 
-  incrementProductQuantity(productId: number) {
+  incrementProductQuantity(productId: number): void {
     const item = this.findItem(productId);
 
     if (!item) {
@@ -55,8 +75,8 @@ export default class ShoppingCart {
     item.quantity++;
     this.localStorage.save(this.cart);
   }
-  
-  decrementProductQuantity(productId: number) {
+
+  decrementProductQuantity(productId: number): void {
     const item = this.findItem(productId);
 
     if (!item) {
@@ -72,7 +92,10 @@ export default class ShoppingCart {
     this.localStorage.save(this.cart);
   }
 
-  clearCart() {
+  /**
+   * Removes all items from the shopping cart and clears the local storage.
+   */
+  clearCart(): void {
     this.cart = [];
     this.localStorage.remove();
   }
