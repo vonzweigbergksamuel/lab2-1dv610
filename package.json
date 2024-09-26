@@ -1,5 +1,5 @@
 {
-  "name": "shopping-cart-module",
+  "name": "@svz/shopping-cart",
   "version": "1.0.0",
   "description": "A simple shopping cart module using local- or session storage for persistence.",
   "type": "module",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vonzweigbergksamuel/lab2-1dv610"
+    "url": "git+https://github.com/vonzweigbergksamuel/lab2-1dv610.git"
   },
   "author": "Samuel von Zweigbergk <samuelvonzweigbergk.p@gmail.com>",
   "license": "MIT",
