@@ -34,7 +34,7 @@ A product template is not provided by this module. The user is responsible for c
 ## Installation
 
 ```bash
-  npm install shopping-cart-module
+  npm install @svz1234/shopping-cart
 ```
 
 <br>
