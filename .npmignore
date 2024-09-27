@@ -1,9 +1,10 @@
 /src
+/test
 /node_modules
 
 tsconfig.json
 tsup.config.js
-DEV.md
+jest.config.js
 
 .gitignore
 .env
