@@ -1,4 +1,6 @@
 import StorageHandler from "./StorageHandler";
+import LocalStorageHandler from "./LocalStorageHandler";
+import SessionStorageHandler from "./SessionStorageHandler";
 import CartItem from "./CartItem";
 
 /**
@@ -11,10 +13,16 @@ export default class ShoppingCart {
 
   /**
    * The Shopping Cart needs a storage handler to save and load the cart.
-   * Provide an instance of a storage handler to the constructor.
+   * Provide a storageType of "localStorage" or "sessionStorage" to choose the storage handler.
+   * If no storageType is provided, it defaults to "localStorage".
    */
-  constructor(storageHandler: StorageHandler) {
-    this.storageHandler = storageHandler;
+  constructor(storageType?: "localStorage" | "sessionStorage") {
+    if (storageType === "sessionStorage") {
+      this.storageHandler = new SessionStorageHandler();
+    }
+
+    this.storageHandler = new LocalStorageHandler();
+
     this.cart = this.storageHandler.load() || [];
   }
 
