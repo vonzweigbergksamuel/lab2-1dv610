@@ -42,37 +42,49 @@ A product template is not provided by this module. The user is responsible for c
 ## Usage
 
 1. Install the module as described above
-2. Import the `ShoppingCart` class and the desired storage handler into your project
-3. Create a new instance of a storage handler class, either `LocalStorageHandler` or `SessionStorageHandler`
-4. Create a new instance of the `ShoppingCart` class, passing the storage handler as an argument
+2. Import the `ShoppingCart` class into your project
+3. Create a new instance of the `ShoppingCart` class
+4. Pass the string "localStorage" or "sessionStorage" to the constructor of the `ShoppingCart` to use the respective storage handler. Local storage is used by default if no argument is provided
 5. Use the methods provided by the `ShoppingCart` class to manage the cart
 
 <br>
 
 ```typescript
-import { ShoppingCart, LocalStorageHandler } from "shopping-cart-module";
+import { ShoppingCart } from "@svz1234/shopping-cart";
 
-const storageHandler = new LocalStorageHandler();
-
-const cart = new ShoppingCart(storageHandler);
+// Pass the string "localStorage" or "sessionStorage" to the constructor
+const cart = new ShoppingCart("localStorage");
 
 /**
  * The following methods take a product id as argument.
  * The product id can, as of now, only be a number.
  * This can potentially be changed in the future to support other types, like strings.
  */
-cart.addProduct(123);
-cart.removeProduct(123);
-cart.incrementProductQuantity(123);
-cart.decrementProductQuantity(123);
-cart.getProductQuantity(123);
+cart.addProduct(123); // Returns void
+cart.removeProduct(123); // Returns void
+cart.incrementProductQuantity(123); // Returns void
+cart.decrementProductQuantity(123); // Returns void
+
+cart.getProductQuantity(123); // Returns number
+console.log(cart.getProductQuantity(123)); // Example output: 4
 
 /**
  * The following methods do not take any arguments.
  */
-cart.getCart();
-cart.getTotalQuantity();
-cart.clearCart();
+cart.getCart(); // Returns CartItem[]
+console.log(cart.getCart());
+/*
+  Example output: [
+    CartItem { productId: 1, quantity: 1 },
+    CartItem { productId: 2, quantity: 3 },
+    CartItem { productId: 3, quantity: 5 }
+  ]
+ */
+
+cart.getTotalQuantity(); // Returns number
+console.log(cart.getTotalQuantity()); // Example output: 3
+
+cart.clearCart(); // Returns void
 ```
 
 <br>
@@ -87,8 +99,14 @@ cart.clearCart();
 
 MIT ©
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 <br>
 
 ## GitHub
 
 [GitHub Repository](https://github.com/vonzweigbergksamuel/lab2-1dv610)
+
+Testing is done using ts-jest (jest with typescript support). The tests can be found in the GitHub repository under the `test` directory. The tests are run using the `npm run test` command.

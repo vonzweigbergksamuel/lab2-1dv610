@@ -5,6 +5,7 @@
 tsconfig.json
 tsup.config.js
 jest.config.js
+TESTING.md
 
 .gitignore
 .env

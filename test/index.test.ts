@@ -2,24 +2,20 @@
  * @jest-environment jsdom
  */
 
-import {
-  ShoppingCart,
-  LocalStorageHandler,
-  SessionStorageHandler,
-} from "../src/index";
+import { ShoppingCart } from "../src/index";
 
 test("ShoppingCart can be instantiated with LocalStorageHandler", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   expect(cart).toBeInstanceOf(ShoppingCart);
 });
 
 test("ShoppingCart can be instantiated with SessionStorageHandler", () => {
-  const cart = new ShoppingCart(new SessionStorageHandler());
+  const cart = new ShoppingCart("sessionStorage");
   expect(cart).toBeInstanceOf(ShoppingCart);
 });
 
 test("Items can be added to the cart", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   cart.addProductToCart(1);
   cart.addProductToCart(2);
   cart.addProductToCart(3);
@@ -30,7 +26,7 @@ test("Items can be added to the cart", () => {
 });
 
 test("Items can be removed from the cart", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   cart.addProductToCart(1);
   cart.addProductToCart(2);
   cart.addProductToCart(3);
@@ -43,7 +39,7 @@ test("Items can be removed from the cart", () => {
 });
 
 test("Items can be incremented in the cart", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   cart.addProductToCart(1);
 
   for (let i = 0; i < 10; i++) {
@@ -56,7 +52,7 @@ test("Items can be incremented in the cart", () => {
 });
 
 test("Items can be decremented in the cart", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   cart.addProductToCart(1);
 
   for (let i = 0; i < 10; i++) {
@@ -73,7 +69,7 @@ test("Items can be decremented in the cart", () => {
 });
 
 test("Items decremented to 0 are removed from the cart", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   cart.addProductToCart(1);
 
   for (let i = 0; i < 5; i++) {
@@ -92,7 +88,7 @@ test("Items decremented to 0 are removed from the cart", () => {
 });
 
 test("Cart can be cleared", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   cart.addProductToCart(1);
   cart.addProductToCart(2);
   cart.addProductToCart(3);
@@ -103,12 +99,12 @@ test("Cart can be cleared", () => {
 });
 
 test("Cart can be saved and loaded from LocalStorage", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   cart.addProductToCart(1);
   cart.addProductToCart(2);
   cart.addProductToCart(3);
 
-  const newCart = new ShoppingCart(new LocalStorageHandler());
+  const newCart = new ShoppingCart("localStorage");
 
   expect(newCart.getTotalQuantity()).toBe(3);
 
@@ -116,12 +112,12 @@ test("Cart can be saved and loaded from LocalStorage", () => {
 });
 
 test("Cart can be saved and loaded from SessionStorage", () => {
-  const cart = new ShoppingCart(new SessionStorageHandler());
+  const cart = new ShoppingCart("sessionStorage");
   cart.addProductToCart(1);
   cart.addProductToCart(2);
   cart.addProductToCart(3);
 
-  const newCart = new ShoppingCart(new SessionStorageHandler());
+  const newCart = new ShoppingCart("sessionStorage");
 
   expect(newCart.getTotalQuantity()).toBe(3);
 
@@ -129,7 +125,7 @@ test("Cart can be saved and loaded from SessionStorage", () => {
 });
 
 test("getCart returns an array of CartItems", () => {
-  const cart = new ShoppingCart(new LocalStorageHandler());
+  const cart = new ShoppingCart("localStorage");
   cart.addProductToCart(1);
   cart.addProductToCart(2);
   cart.addProductToCart(3);
