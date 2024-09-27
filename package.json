@@ -1,6 +1,6 @@
 {
   "name": "@svz1234/shopping-cart",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple shopping cart module using local- or session storage for persistence.",
   "type": "module",
   "module": "dist/index.js",
