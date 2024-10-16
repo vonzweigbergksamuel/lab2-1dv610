@@ -17,6 +17,10 @@
 
 <br>
 
+- Data from local- or session storage gets automatically sanitized to make it more secure
+
+<br>
+
 ---
 
 <br>
@@ -45,20 +49,20 @@ A product template is not provided by this module. The user is responsible for c
 2. Import the `ShoppingCart` class into your project
 3. Create a new instance of the `ShoppingCart` class
 4. Pass the string "localStorage" or "sessionStorage" to the constructor of the `ShoppingCart` to use the respective storage handler. Local storage is used by default if no argument is provided
-5. Use the methods provided by the `ShoppingCart` class to manage the cart
+5. Pass the string "uuid" or "alphanumeric" to the constructor of the `ShoppingCart` to use the respective string sanitization method. "uuid" is used by default if no argument is provided
+6. Use the methods provided by the `ShoppingCart` class to manage the cart
 
 <br>
 
 ```typescript
 import { ShoppingCart } from "@svz1234/shopping-cart";
 
-// Pass the string "localStorage" or "sessionStorage" to the constructor
-const cart = new ShoppingCart("localStorage");
+const cart = new ShoppingCart("localStorage", "alphanumeric");
 
 /**
  * The following methods take a product id as argument.
- * The product id can, as of now, only be a number.
- * This can potentially be changed in the future to support other types, like strings.
+ * The product id can be either a number or a string.
+ * If the product id is a string, it will be sanitized according to the string sanitization method provided in the constructor.
  */
 cart.addProduct(123); // Returns void
 cart.removeProduct(123); // Returns void

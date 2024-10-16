@@ -3,9 +3,15 @@ import CartItem from "./CartItem";
 
 export default class LocalStorageHandler implements StorageHandler {
   private localStorage;
+  private regex =
+    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/g;
 
-  constructor() {
+  constructor(regexType?: "uuid" | "alphanumeric") {
     this.localStorage = window.localStorage;
+
+    if (regexType === "alphanumeric") {
+      this.regex = /[^a-zA-Z0-9]/g;
+    }
   }
 
   save(cart: CartItem[]): void {
@@ -39,23 +45,15 @@ export default class LocalStorageHandler implements StorageHandler {
 
     const sanitizedCart = data
       .map((item) => {
-        if (typeof item !== "object") {
-          console.warn(
-            "Invalid data format in localStorage. Expected an object."
-          );
-          return null;
-        }
-
-        if (
-          typeof item.productId !== "number" ||
-          typeof item.quantity !== "number" ||
-          item.quantity <= 0 ||
-          item.productId < 0
-        ) {
+        if (!this.isCartItemValid(item)) {
           console.warn(
             "Invalid data format in localStorage. Expected a CartItem object."
           );
           return null;
+        }
+
+        if (typeof item.productId === "string") {
+          item.productId = this.sanitizeStrings(item.productId);
         }
 
         return new CartItem(item.productId, item.quantity);
@@ -77,9 +75,32 @@ export default class LocalStorageHandler implements StorageHandler {
       return "";
     }
 
-    // Variable for determining which characters are allowed.
-    const REGEX = /[^a-zA-Z0-9]/g;
+    return input.replace(this.regex, "");
+  }
 
-    return input.replace(REGEX, "");
+  private isCartItemValid(item: any): boolean {
+    if (typeof item !== "object") {
+      return false;
+    }
+
+    if (
+      typeof item.productId !== "string" &&
+      typeof item.productId !== "number"
+    ) {
+      return false;
+    }
+
+    if (typeof item.quantity !== "number" || item.quantity <= 0) {
+      return false;
+    }
+
+    if (
+      (typeof item.productId === "string" && item.productId.length === 0) ||
+      (typeof item.productId === "number" && item.productId < 0)
+    ) {
+      return false;
+    }
+
+    return true;
   }
 }

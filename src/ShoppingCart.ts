@@ -16,12 +16,15 @@ export default class ShoppingCart {
    * Provide a storageType of "localStorage" or "sessionStorage" to choose the storage handler.
    * If no storageType is provided, it defaults to "localStorage".
    */
-  constructor(storageType?: "localStorage" | "sessionStorage") {
+  constructor(
+    storageType?: "localStorage" | "sessionStorage",
+    regex?: "uuid" | "alphanumeric"
+  ) {
     if (storageType === "sessionStorage") {
-      this.storageHandler = new SessionStorageHandler();
+      this.storageHandler = new SessionStorageHandler(regex);
+    } else {
+      this.storageHandler = new LocalStorageHandler(regex);
     }
-
-    this.storageHandler = new LocalStorageHandler();
 
     this.cart = this.storageHandler.load() || [];
   }
@@ -60,11 +63,12 @@ export default class ShoppingCart {
 
     if (item) {
       item.quantity++;
+      this.saveToStorage();
       return;
     }
 
     this.cart.push(new CartItem(productId, 1));
-    this.storageHandler.save(this.cart);
+    this.saveToStorage();
   }
 
   /**
@@ -83,7 +87,7 @@ export default class ShoppingCart {
     }
 
     this.cart.splice(itemIndex, 1);
-    this.storageHandler.save(this.cart);
+    this.saveToStorage();
   }
 
   /**
@@ -100,7 +104,7 @@ export default class ShoppingCart {
     }
 
     item.quantity++;
-    this.storageHandler.save(this.cart);
+    this.saveToStorage();
   }
 
   /**
@@ -123,7 +127,7 @@ export default class ShoppingCart {
     }
 
     item.quantity--;
-    this.storageHandler.save(this.cart);
+    this.saveToStorage();
   }
 
   /**
@@ -136,5 +140,9 @@ export default class ShoppingCart {
 
   private findItem(productId: number): CartItem | undefined {
     return this.cart.find((item) => item.productId === productId);
+  }
+
+  private saveToStorage(): void {
+    this.storageHandler.save(this.cart);
   }
 }
