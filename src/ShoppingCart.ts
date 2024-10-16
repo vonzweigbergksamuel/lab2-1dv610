@@ -43,7 +43,7 @@ export default class ShoppingCart {
   /**
    * Returns the quantity of a single product in the shopping cart.
    */
-  getProductQuantity(productId: number): number {
+  getProductQuantity(productId: number | string): number {
     const item = this.findItem(productId);
 
     return item ? item.quantity : 0;
@@ -61,7 +61,7 @@ export default class ShoppingCart {
    * If the product is already in the cart, it increments the quantity by 1.
    * The cart is then saved using the storage handler of choice.
    */
-  addProductToCart(productId: number): void {
+  addProductToCart(productId: number | string): void {
     const item = this.findItem(productId);
 
     if (item) {
@@ -79,7 +79,7 @@ export default class ShoppingCart {
    * If the product is not in the cart, it logs an error and returns nothing.
    * The cart is then saved using the storage handler of choice.
    */
-  removeProductFromCart(productId: number): void {
+  removeProductFromCart(productId: number | string): void {
     const itemIndex = this.cart.findIndex(
       (item) => item.productId === productId
     );
@@ -98,7 +98,7 @@ export default class ShoppingCart {
    * If the product is not in the cart, it adds the product with a quantity of 1.
    * The cart is then saved using the storage handler of choice.
    */
-  incrementProductQuantity(productId: number): void {
+  incrementProductQuantity(productId: number | string): void {
     const item = this.findItem(productId);
 
     if (!item) {
@@ -116,7 +116,7 @@ export default class ShoppingCart {
    * If the quantity of the product is less than or equal to 1 when the method is called, it removes the product from the cart.
    * The cart is then saved using the storage handler of choice.
    */
-  decrementProductQuantity(productId: number): void {
+  decrementProductQuantity(productId: number | string): void {
     const item = this.findItem(productId);
 
     if (!item) {
@@ -141,7 +141,7 @@ export default class ShoppingCart {
     this.storageHandler.remove();
   }
 
-  private findItem(productId: number): CartItem | undefined {
+  private findItem(productId: number | string): CartItem | undefined {
     return this.cart.find((item) => item.productId === productId);
   }
 
