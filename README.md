@@ -49,7 +49,7 @@ A product template is not provided by this module. The user is responsible for c
 2. Import the `ShoppingCart` class into your project
 3. Create a new instance of the `ShoppingCart` class
 4. Pass the string "localStorage" or "sessionStorage" to the constructor of the `ShoppingCart` to use the respective storage handler. Local storage is used by default if no argument is provided
-5. Pass the string "uuid" or "alphanumeric" to the constructor of the `ShoppingCart` to use the respective string sanitization method. "uuid" is used by default if no argument is provided
+5. Pass the string "uuid" or "alphanumeric" to the constructor of the `ShoppingCart` to use the respective string sanitization method. "alphanumeric" is used by default if no argument is provided
 6. Use the methods provided by the `ShoppingCart` class to manage the cart
 
 <br>
@@ -57,7 +57,7 @@ A product template is not provided by this module. The user is responsible for c
 ```typescript
 import { ShoppingCart } from "@svz1234/shopping-cart";
 
-const cart = new ShoppingCart("localStorage", "alphanumeric");
+const cart = new ShoppingCart("localStorage", "uuid");
 
 /**
  * The following methods take a product id as argument.

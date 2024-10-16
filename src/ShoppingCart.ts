@@ -17,7 +17,7 @@ export default class ShoppingCart {
    * If no storageType is provided, it defaults to "localStorage".
    *
    * To sanitize product IDs, provide a regex of "uuid" or "alphanumeric".
-   * If no regex is provided, it defaults to "uuid".
+   * If no regex is provided, it defaults to "alphanumeric".
    */
   constructor(
     storageType?: "localStorage" | "sessionStorage",

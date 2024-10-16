@@ -3,14 +3,14 @@ import CartItem from "./CartItem";
 
 export default class LocalStorageHandler implements StorageHandler {
   private localStorage;
-  private regex =
-    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/g;
+  private regex = /[^a-zA-Z0-9]/g;
 
   constructor(regexType?: "uuid" | "alphanumeric") {
     this.localStorage = window.localStorage;
 
-    if (regexType === "alphanumeric") {
-      this.regex = /[^a-zA-Z0-9]/g;
+    if (regexType === "uuid") {
+      this.regex =
+        /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/g;
     }
   }
 
