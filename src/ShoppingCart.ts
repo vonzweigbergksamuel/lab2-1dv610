@@ -15,18 +15,12 @@ export default class ShoppingCart {
    * The Shopping Cart needs a storage handler to save and load the cart.
    * Provide a storageType of "localStorage" or "sessionStorage" to choose the storage handler.
    * If no storageType is provided, it defaults to "localStorage".
-   *
-   * To sanitize product IDs, provide a regex of "uuid" or "alphanumeric".
-   * If no regex is provided, it defaults to "alphanumeric".
    */
-  constructor(
-    storageType?: "localStorage" | "sessionStorage",
-    regex?: "uuid" | "alphanumeric"
-  ) {
+  constructor(storageType?: "localStorage" | "sessionStorage") {
     if (storageType === "sessionStorage") {
-      this.storageHandler = new SessionStorageHandler(regex);
+      this.storageHandler = new SessionStorageHandler();
     } else {
-      this.storageHandler = new LocalStorageHandler(regex);
+      this.storageHandler = new LocalStorageHandler();
     }
 
     this.cart = this.storageHandler.load() || [];
