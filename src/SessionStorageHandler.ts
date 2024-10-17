@@ -3,7 +3,7 @@ import CartItem from "./CartItem";
 
 export default class SessionStorageHandler implements StorageHandler {
   private sessionStorage;
-  private regex = /^[a-zA-Z0-9-_]+$/g;
+  private regex = /[^a-zA-Z0-9_-]/g;
 
   constructor() {
     this.sessionStorage = window.sessionStorage;
@@ -34,7 +34,7 @@ export default class SessionStorageHandler implements StorageHandler {
    */
   private sanitizeData(data: any): CartItem[] {
     if (!Array.isArray(data)) {
-      console.warn("Invalid data format in localStorage. Expected an array.");
+      console.warn("Invalid data format in sessionStorage. Expected an array.");
       return [];
     }
 
@@ -42,35 +42,23 @@ export default class SessionStorageHandler implements StorageHandler {
       .map((item) => {
         if (!this.isCartItemValid(item)) {
           console.warn(
-            "Invalid data format in localStorage. Expected a CartItem object."
+            "Invalid data format in sessionStorage. Expected a CartItem object."
           );
           return null;
         }
 
-        if (typeof item.productId === "string") {
-          item.productId = this.sanitizeStrings(item.productId);
+        const sanitizedProductId = item.productId.replace(this.regex, "");
+
+        if (sanitizedProductId.length <= 0) {
+          console.warn("Product ID cannot be empty after sanitization");
+          return null;
         }
 
-        return new CartItem(item.productId, item.quantity);
+        return new CartItem(sanitizedProductId, item.quantity);
       })
       .filter((item) => item !== null);
 
     return sanitizedCart;
-  }
-
-  /**
-   * If productIds are stored as strings, this method sanitizes them.
-   * It's main purpose is to prevent XSS attacks.
-   * Accepted characters are: a-z, A-Z, 0-9.
-   * REGEX can be modified to accept other characters if needed.
-   */
-  private sanitizeStrings(input: string): string {
-    if (typeof input !== "string") {
-      console.warn("Invalid data format in localStorage. Expected a string.");
-      return "";
-    }
-
-    return input.replace(this.regex, "");
   }
 
   private isCartItemValid(item: any): boolean {

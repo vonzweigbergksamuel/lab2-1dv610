@@ -47,30 +47,18 @@ export default class LocalStorageHandler implements StorageHandler {
           return null;
         }
 
-        if (typeof item.productId === "string") {
-          item.productId = this.sanitizeStrings(item.productId);
+        const sanitizedProductId = item.productId.replace(this.regex, "");
+
+        if (sanitizedProductId.length <= 0) {
+          console.warn("Product ID cannot be empty after sanitization");
+          return null;
         }
 
-        return new CartItem(item.productId, item.quantity);
+        return new CartItem(sanitizedProductId, item.quantity);
       })
       .filter((item) => item !== null);
 
     return sanitizedCart;
-  }
-
-  /**
-   * If productIds are stored as strings, this method sanitizes them.
-   * It's main purpose is to prevent XSS attacks.
-   * Accepted characters are: a-z, A-Z, 0-9.
-   * REGEX can be modified to accept other characters if needed.
-   */
-  private sanitizeStrings(input: string): string {
-    if (typeof input !== "string") {
-      console.warn("Invalid data format in localStorage. Expected a string.");
-      return "";
-    }
-
-    return input.replace(this.regex, "");
   }
 
   private isCartItemValid(item: any): boolean {
