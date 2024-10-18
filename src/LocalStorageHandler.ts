@@ -3,7 +3,7 @@ import CartItem from "./CartItem";
 
 export default class LocalStorageHandler implements StorageHandler {
   private localStorage;
-  private regex = /^[a-zA-Z0-9-_]+$/g;
+  private regex = /[^a-zA-Z0-9-_]/g;
 
   constructor() {
     this.localStorage = window.localStorage;
@@ -47,11 +47,15 @@ export default class LocalStorageHandler implements StorageHandler {
           return null;
         }
 
-        const sanitizedProductId = item.productId.replace(this.regex, "");
+        let sanitizedProductId = item.productId;
 
-        if (sanitizedProductId.length <= 0) {
-          console.warn("Product ID cannot be empty after sanitization");
-          return null;
+        if (typeof item.productId === "string") {
+          sanitizedProductId = item.productId.replace(this.regex, "");
+
+          if (sanitizedProductId.length <= 0) {
+            console.warn("Product ID cannot be empty after sanitization");
+            return null;
+          }
         }
 
         return new CartItem(sanitizedProductId, item.quantity);

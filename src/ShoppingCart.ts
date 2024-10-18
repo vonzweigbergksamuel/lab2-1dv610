@@ -27,6 +27,14 @@ export default class ShoppingCart {
   }
 
   /**
+   * Loads the shopping cart from the storage handler of choice.
+   * It does this to prevent having to create a new instance every time you want to get the cart from storage.
+   */
+  load(): void {
+    this.cart = this.storageHandler.load() || [];
+  }
+
+  /**
    * Returns an array of the items in the shopping cart.
    * Each item is an object with a productId and a quantity.
    */

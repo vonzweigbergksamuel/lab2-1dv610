@@ -11,6 +11,7 @@
 
 <br>
 
+- Load the cart from storage of choice
 - Get the cart object, containing all products in the cart with their respective quantities
 - Get the total quantity of products in the cart
 - Get the quantity of a specific product in the cart
@@ -75,6 +76,7 @@ console.log(cart.getProductQuantity(123)); // Example output: 4
 /**
  * The following methods do not take any arguments.
  */
+cart.load(); // Returns void
 cart.getCart(); // Returns CartItem[]
 console.log(cart.getCart());
 /*
